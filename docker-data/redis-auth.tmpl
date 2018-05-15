@@ -1,0 +1,7 @@
+bind 0.0.0.0
+port ${PORT}
+appendonly yes
+
+requirepass ${REQUIRE_AUTH}
+
+dir /redis-data/${PORT}
