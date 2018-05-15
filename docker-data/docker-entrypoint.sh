@@ -18,9 +18,17 @@ if [ "$1" = 'redis-cluster' ]; then
       fi
 
       if [ "$port" -lt "7006" ]; then
-        PORT=${port} envsubst < /redis-conf/redis-cluster.tmpl > /redis-conf/${port}/redis.conf
+        if [ -z "$MASTER_AUTH" ] && [ -z "$REQUIRE_AUTH" ] then
+            PORT=${port} envsubst < /redis-conf/redis-cluster.tmpl > /redis-conf/${port}/redis.conf
+        else
+            PORT=${port} MASTER_AUTH=${MASTER_AUTH} REQUIRE_AUTH=${REQUIRE_AUTH} envsubst < /redis-conf/redis-cluster-auth.tmpl > /redis-conf/${port}/redis.conf
+        fi
       else
-        PORT=${port} envsubst < /redis-conf/redis.tmpl > /redis-conf/${port}/redis.conf
+         if[ -z "$REQUIRE_AUTH" ] then
+            PORT=${port} envsubst < /redis-conf/redis.tmpl > /redis-conf/${port}/redis.conf
+         else
+            PORT=${port} REQUIRE_AUTH=${REQUIRE_AUTH} envsubst < /redis-conf/redis-auth.tmpl > /redis-conf/${port}/redis.conf
+         fi
       fi
     done
 
