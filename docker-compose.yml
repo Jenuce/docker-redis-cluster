@@ -2,7 +2,8 @@ version: '2'
 services:
   redis-cluster:
     environment:
-     IP: ${REDIS_CLUSTER_IP}
+     - IP: ${REDIS_CLUSTER_IP}
+     - Auth: ${REDIS_CLUSTER_PWD}
     build:
       context: .
       args:
